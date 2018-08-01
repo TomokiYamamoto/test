@@ -10,8 +10,8 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find_by(id: params[:id])
-
     @user = @post.user
+    @likes_count = Like.where(post_id: @post.id).count
   end
 
   def new
@@ -24,7 +24,7 @@ class PostsController < ApplicationController
       user_id: @current_user.id
     )
     if @post.save
-      flash[:notice] = "投稿を作成しました"
+      flash[:notice] = "You posted successfully!"
       redirect_to("/posts/index")
     else
       render("posts/new")
@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     @post = Post.find_by(id: params[:id])
     @post.content = params[:content]
     if @post.save
-      flash[:notice] = "投稿を編集しました"
+      flash[:notice] = "Post edited."
       redirect_to("/posts/index")
     else
       render("posts/edit")
@@ -49,14 +49,14 @@ class PostsController < ApplicationController
   def destroy
     @post = Post.find_by(id: params[:id])
     @post.destroy
-    flash[:notice] = "投稿を削除しました"
+    flash[:notice] = "Post removed."
     redirect_to("/posts/index")
   end
 
   def ensure_correct_user
    @post = Post.find_by(id: params[:id])
    if @post.user_id != @current_user.id
-     flash[:notice] = "権限がありません"
+     flash[:notice] = "You do not have permission..."
      redirect_to("/posts/index")
    end
  end

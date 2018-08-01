@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     )
     if @user.save
       session[:user_id] = @user.id
-      flash[:notice] = "ユーザー登録が完了しました"
+      flash[:notice] = "Welcome to BACKPACKERS CAFE !"
       redirect_to("/users/#{@user.id}")
     else
       render("users/new")
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     end
 
     if @user.save
-      flash[:notice] = "ユーザー情報を編集しました"
+      flash[:notice] = "User edited."
       redirect_to("/users/#{@user.id}")
     else
       render("users/edit")
@@ -62,10 +62,10 @@ class UsersController < ApplicationController
     @user = User.find_by(email: params[:email], password: params[:password])
     if @user
       session[:user_id] = @user.id
-      flash[:notice] = "ログインしました"
+      flash[:notice] = "You login successfully."
       redirect_to("/posts/index")
     else
-      @error_message = "メールアドレスまたはパスワードが間違っています"
+      @error_message = "Email or password is incorrect."
       @email = params[:email]
       @password = params[:password]
       render("users/login_form")
@@ -74,13 +74,18 @@ class UsersController < ApplicationController
 
   def logout
     session[:user_id] = nil
-    flash[:notice] = "ログアウトしました"
+    flash[:notice] = "You succeeded in logout."
     redirect_to("/login")
+  end
+
+  def likes
+    @user = User.find_by(id: params[:id])
+    @likes = Like.where(user_id: @user.id)
   end
 
   def ensure_correct_user
   if @current_user.id != params[:id].to_i
-    flash[:notice] = "権限がありません"
+    flash[:notice] = "You do not have permission..."
     redirect_to("/posts/index")
   end
 end
