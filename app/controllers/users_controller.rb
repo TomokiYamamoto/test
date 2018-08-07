@@ -3,7 +3,6 @@ class UsersController < ApplicationController
   before_action :forbid_login_user, {only: [:new, :create, :login_form, :login]}
   before_action :ensure_correct_user, {only: [:edit, :update]}
 
-
   def index
     @users = User.all
   end
@@ -25,7 +24,7 @@ class UsersController < ApplicationController
     )
     if @user.save
       session[:user_id] = @user.id
-      flash[:notice] = "Welcome to BACKPACKERS CAFE !"
+      flash[:notice] = "ユーザー登録が完了しました"
       redirect_to("/users/#{@user.id}")
     else
       render("users/new")
@@ -48,7 +47,7 @@ class UsersController < ApplicationController
     end
 
     if @user.save
-      flash[:notice] = "User edited."
+      flash[:notice] = "ユーザー情報を編集しました"
       redirect_to("/users/#{@user.id}")
     else
       render("users/edit")
@@ -59,13 +58,15 @@ class UsersController < ApplicationController
   end
 
   def login
-    @user = User.find_by(email: params[:email], password: params[:password])
-    if @user
+    # メールアドレスのみを用いて、ユーザーを取得するように書き換えてください
+    @user = User.find_by(email: params[:email])
+    # if文の条件を&&とauthenticateメソッドを用いて書き換えてください
+    if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
-      flash[:notice] = "You login successfully."
+      flash[:notice] = "ログインしました"
       redirect_to("/posts/index")
     else
-      @error_message = "Email or password is incorrect."
+      @error_message = "メールアドレスまたはパスワードが間違っています"
       @email = params[:email]
       @password = params[:password]
       render("users/login_form")
@@ -74,7 +75,7 @@ class UsersController < ApplicationController
 
   def logout
     session[:user_id] = nil
-    flash[:notice] = "You succeeded in logout."
+    flash[:notice] = "ログアウトしました"
     redirect_to("/login")
   end
 
@@ -84,10 +85,10 @@ class UsersController < ApplicationController
   end
 
   def ensure_correct_user
-  if @current_user.id != params[:id].to_i
-    flash[:notice] = "You do not have permission..."
-    redirect_to("/posts/index")
+    if @current_user.id != params[:id].to_i
+      flash[:notice] = "権限がありません"
+      redirect_to("/posts/index")
+    end
   end
-end
 
 end
