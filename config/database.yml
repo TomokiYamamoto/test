@@ -21,12 +21,12 @@ test:
   database: db/test.sqlite3
 
 production:
-  database: projectname_production
+  database: my_app_production
   adapter: postgresql
   encoding: unicode
   pool: 5
   # 以下の3つを追加
-  username: projectname
+  username: my_app_production
   password: password
   # RailsサーバとPostgreSQLサーバが同じ場合
   host: localhost
