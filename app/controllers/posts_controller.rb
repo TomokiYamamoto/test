@@ -19,10 +19,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(
-      content: params[:content],
-      user_id: @current_user.id
-    )
+    @post= @current_user.posts.build(content: params[:content])
+
     if @post.save
       flash[:notice] = "You posted successfully!"
       redirect_to("/posts/index")
@@ -63,5 +61,6 @@ class PostsController < ApplicationController
      redirect_to("/posts/index")
    end
  end
+
 
 end
