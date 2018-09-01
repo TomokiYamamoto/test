@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :password, {presence: true}
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
   def posts
     return Post.where(user_id: self.id)
   end
