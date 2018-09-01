@@ -18,7 +18,7 @@
 
     <!-- 変数@likesに対してeach文を用いてください -->
     <% @likes.each do |like| %>
-      <% post = Post.find_by(id: like.id) %>
+      <% post = like.post %>
       <!-- 変数postを定義してください -->
       <div class="posts-index-item">
         <div class="post-left">
